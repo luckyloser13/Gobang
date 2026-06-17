@@ -2,11 +2,40 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Tic Tac Toe Expanded</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic Tac Toe</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <h1>Game loads here</h1>
+    
+    <div id="mode-selector">
+      <h2>Select Game Mode</h2>
+      <button id="btn-two-player">2 Player</button>
+      <button id="btn-vs-ai">vs AI</button>
+    </div>
+
+    <h1>Tic Tac Toe</h1>
+
+    <div id="status">Player X's turn</div>
+    <div id="scoreboard">
+      <span id="score-x">X : 0</span>
+      <span id="score-draw">Draw : 0</span>
+      <span id="score-o">O : 0</span>
+    </div>
+    <div id="board">
+      <div class="cell" data-index="0"></div>
+      <div class="cell" data-index="1"></div>
+      <div class="cell" data-index="2"></div>
+      <div class="cell" data-index="3"></div>
+      <div class="cell" data-index="4"></div>
+      <div class="cell" data-index="5"></div>
+      <div class="cell" data-index="6"></div>
+      <div class="cell" data-index="7"></div>
+      <div class="cell" data-index="8"></div>
+    </div>
+
+    <button id="restart">Restart</button>
+
     <script src="game.js"></script>
   </body>
 </html>
