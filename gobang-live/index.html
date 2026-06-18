@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gobang Live</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+
+    <!-- Room Screen -->
+    <div id="room-screen">
+      <h1>Gobang Live</h1>
+      <p>Play with a friend remotely</p>
+
+      <div id="room-actions">
+
+        <div class="room-option">
+          <h2>Create a Room</h2>
+          <p>Start a new game and share the code with your friend</p>
+          <button id="btn-create">Create Room</button>
+        </div>
+
+        <div class="divider">OR</div>
+
+        <div class="room-option">
+          <h2>Join a Room</h2>
+          <p>Enter the code your friend shared with you</p>
+          <input id="room-code-input" type="text" maxlength="4" placeholder="Enter code" />
+          <button id="btn-join">Join Room</button>
+        </div>
+
+      </div>
+
+      <div id="room-status"></div>
+
+      <div id="room-code-display" class="hidden">
+        <p>Share this code with your friend:</p>
+        <span id="room-code-text"></span>
+        <p id="waiting-text">Waiting for opponent to join...</p>
+      </div>
+
+      <div id="error-message" class="hidden"></div>
+
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="hidden">
+
+      <div id="board-container">
+        <div id="board"></div>
+      </div>
+
+      <div id="sidebar">
+        <h1>Gobang Live</h1>
+        <div id="room-label"></div>
+        <div id="status"></div>
+        <div id="scoreboard">
+          <span id="score-a">A : 0</span>
+          <span id="score-b">B : 0</span>
+        </div>
+        <div id="player-label"></div>
+        <button id="restart">Restart</button>
+      </div>
+
+    </div>
+
+    <script src="game.js"></script>
+  </body>
+</html>
