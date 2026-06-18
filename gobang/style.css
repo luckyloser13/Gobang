@@ -186,3 +186,23 @@ body {
   font-size: 1.1rem;
   color: #a8a8b3;
 }
+
+#undo {
+  margin-top: 10px;
+  padding: 10px 30px;
+  font-size: 1rem;
+  background-color: #16213e;
+  color: #eaeaea;
+  border: 2px solid #e94560;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#undo:hover {
+  background-color: #1f2d4a;
+}
+
+#undo:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -9,6 +9,8 @@ let board = [];
 let currentPlayerIndex = 0;
 let gameActive = false;
 let scores = { A: 0, B: 0 };
+let moveHistory = [];
+let undosLeft = 5;
 
 // --- HTML Elements ---
 const modeSelector = document.getElementById("mode-selector");
@@ -19,6 +21,7 @@ const restartButton = document.getElementById("restart");
 const btnStart = document.getElementById("btn-start");
 const scoreA = document.getElementById("score-a");
 const scoreB = document.getElementById("score-b");
+const undoButton = document.getElementById("undo");
 
 // --- Start Game ---
 function startGame() {
@@ -33,6 +36,10 @@ function initBoard() {
   currentPlayerIndex = 0;
   gameActive = true;
   status.textContent = `Player ${PLAYERS[currentPlayerIndex]}'s turn`;
+  moveHistory = [];
+  undosLeft = 5;
+  undoButton.textContent = `Undo (${undosLeft})`;
+  undoButton.disabled = false;
   renderBoard();
 }
 
@@ -63,6 +70,8 @@ function handleCellClick(e) {
   board[row][col] = currentPlayer;
   e.target.textContent = currentPlayer;
   e.target.classList.add(currentPlayer === "A" ? "player-a" : "player-b");
+  moveHistory.push({ row, col, player: currentPlayer });
+
 
   // Check win
   const winningCells = checkWin(row, col, currentPlayer);
@@ -121,6 +130,28 @@ function getCellsInDirection(row, col, dr, dc, player) {
   return cells;
 }
 
+function undoMove() {
+  if (moveHistory.length === 0 || undosLeft === 0) return;
+
+  const last = moveHistory.pop();
+  board[last.row][last.col] = "";
+  const index = last.row * COLS + last.col;
+  const cell = boardEl.children[index];
+  cell.textContent = "";
+  cell.classList.remove("player-a", "player-b", "winning");
+
+  // reactivate game in case it was over
+  gameActive = true;
+
+  // switch turn back
+  currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+  status.textContent = `Player ${PLAYERS[currentPlayerIndex]}'s turn`;
+
+  undosLeft--;
+  undoButton.textContent = `Undo (${undosLeft})`;
+  if (undosLeft === 0) undoButton.disabled = true;
+}
+
 // --- Highlight Winning Cells ---
 function highlightWin(winningCells) {
   winningCells.forEach(([r, c]) => {
@@ -146,4 +177,5 @@ function restartGame() {
 
 // --- Event Listeners ---
 btnStart.addEventListener("click", startGame);
+undoButton.addEventListener("click", undoMove);
 restartButton.addEventListener("click", restartGame);
