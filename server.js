@@ -35,7 +35,7 @@ io.on("connection", (socket) => {
     const code = generateRoomCode();
     rooms[code] = {
       players: [socket.id],
-      board: Array.from({ length: 25 }, () => Array(20).fill("")),
+      board: Array.from({ length: 21 }, () => Array(20).fill("")),
       currentPlayer: 0,
       gameActive: false
     };

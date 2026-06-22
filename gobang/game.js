@@ -1,5 +1,5 @@
 // --- Constants ---
-const ROWS = 25;
+const ROWS = 21;
 const COLS = 20;
 const WIN_COUNT = 5;
 const PLAYERS = ["A", "B"];

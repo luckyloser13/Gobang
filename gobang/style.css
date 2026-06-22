@@ -5,9 +5,9 @@
 }
 
 body {
-  background-color: #1a1a2e;
+  background-color: #a8a8b3;
   font-family: Arial, sans-serif;
-  color: #eaeaea;
+  color: #000000;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -26,7 +26,7 @@ body {
 
 #mode-selector h1 {
   font-size: 3rem;
-  color: #e94560;
+  color: #db0126;
 }
 
 #mode-selector p {
@@ -37,7 +37,7 @@ body {
 #btn-start {
   padding: 14px 50px;
   font-size: 1.1rem;
-  background-color: #e94560;
+  background-color: #db0126;
   color: white;
   border: none;
   border-radius: 8px;
@@ -45,7 +45,7 @@ body {
 }
 
 #btn-start:hover {
-  background-color: #c73652;
+  background-color: #db0126;
 }
 
 /* --- Game Screen --- */
@@ -71,12 +71,12 @@ body {
 
 #top-bar h1 {
   font-size: 2rem;
-  color: #e94560;
+  color: #db0126;
 }
 
 #status {
   font-size: 1.2rem;
-  color: #a8a8b3;
+  color: #000000;
 }
 
 /* --- Scoreboard --- */
@@ -87,21 +87,21 @@ body {
 }
 
 #score-a {
-  color: #4fc3f7;
+  color: #000000;
 }
 
 #score-draw {
-  color: #00ffff;
+  color: #000000;
 }
 
 #score-b {
-  color: #00ff00;
+  color: #000000;
 }
 
 /* --- Board Container --- */
 #board-container {
   overflow: hidden;
-  border: 3px solid #e94560;
+  border: 3px solid #a8a8b3;
   border-radius: 4px;
   flex-shrink: 0;
 }
@@ -109,21 +109,21 @@ body {
 /* --- Board --- */
 #board {
   display: grid;
-  grid-template-columns: repeat(20, 32px);
-  grid-template-rows: repeat(25, 32px);
+  grid-template-columns: repeat(20, 40px);
+  grid-template-rows: repeat(21, 40px);
   gap: 2px;
-  background-color: #e94560;
+  background-color: #000000;
   padding: 2px;
 }
 
 .cell {
-  width: 32px;
-  height: 32px;
-  background-color: #1a1a2e;
+  width: 40px;
+  height: 40px;
+  background-color: #a8a8b3;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
   color: #eaeaea;
@@ -131,15 +131,15 @@ body {
 }
 
 .cell:hover {
-  background-color: #16213e;
+  background-color: #000000;
 }
 
 .cell.player-a {
-  color: #00ffff;
+  color: #000000;
 }
 
 .cell.player-b {
-  color: #00ff00;
+  color: #000000;
 }
 
 .cell.winning {
@@ -151,7 +151,7 @@ body {
   margin-top: 10px;
   padding: 10px 30px;
   font-size: 1rem;
-  background-color: #e94560;
+  background-color: #db0126;
   color: white;
   border: none;
   border-radius: 6px;
@@ -159,7 +159,7 @@ body {
 }
 
 #restart:hover {
-  background-color: #c73652;
+  background-color: #db0126;
 }
 
 #sidebar {
@@ -172,7 +172,7 @@ body {
 
 #sidebar h1 {
   font-size: 2rem;
-  color: #e94560;
+  color: #000000;
 }
 
 #scoreboard {
@@ -191,15 +191,15 @@ body {
   margin-top: 10px;
   padding: 10px 30px;
   font-size: 1rem;
-  background-color: #16213e;
+  background-color: #000000;
   color: #eaeaea;
-  border: 2px solid #e94560;
+  border: 2px solid #db0126;
   border-radius: 6px;
   cursor: pointer;
 }
 
 #undo:hover {
-  background-color: #1f2d4a;
+  background-color: #000000;
 }
 
 #undo:disabled {
