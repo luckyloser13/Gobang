@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gobang Live</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://gobang-f7xl.onrender.com/socket.io/socket.io.js"></script>
   </head>
   <body>
 
@@ -33,8 +33,6 @@
 
       </div>
 
-      <div id="room-status"></div>
-
       <div id="room-code-display" class="hidden">
         <p>Share this code with your friend:</p>
         <span id="room-code-text"></span>
@@ -55,12 +53,12 @@
       <div id="sidebar">
         <h1>Gobang Live</h1>
         <div id="room-label"></div>
+        <div id="player-label"></div>
         <div id="status"></div>
         <div id="scoreboard">
           <span id="score-a">A : 0</span>
           <span id="score-b">B : 0</span>
         </div>
-        <div id="player-label"></div>
         <button id="restart">Restart</button>
       </div>
 

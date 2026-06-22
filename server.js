@@ -29,29 +29,34 @@ io.on("connection", (socket) => {
 
   // --- Create Room ---
   socket.on("create_room", () => {
-    const roomCode = generateRoomCode();
-    rooms[roomCode] = {
+    // prevent creating multiple rooms
+    if (socket.roomCode) return;
+
+    const code = generateRoomCode();
+    rooms[code] = {
       players: [socket.id],
-      board: Array.from({ length: 20 }, () => Array(25).fill("")),
+      board: Array.from({ length: 25 }, () => Array(20).fill("")),
       currentPlayer: 0,
       gameActive: false
     };
-    socket.join(roomCode);
-    socket.roomCode = roomCode;
+    socket.join(code);
+    socket.roomCode = code;
     socket.playerIndex = 0;
-    socket.emit("room_created", { roomCode, playerIndex: 0 });
-    console.log(`Room created: ${roomCode}`);
-    console.log("All rooms:", Object.keys(rooms));
-
+    socket.emit("room_created", { roomCode: code, playerIndex: 0 });
+    console.log(`Room created: [${code}]`);
+    console.log("Active rooms:", Object.keys(rooms));
   });
 
   // --- Join Room ---
-  socket.on("join_room", (roomCode) => {
-    roomCode = roomCode.trim().toUpperCase();
-    const room = rooms[roomCode];
+  socket.on("join_room", (rawCode) => {
+    // prevent joining multiple rooms
+    if (socket.roomCode) return;
+
+    const code = rawCode.trim().toUpperCase();
+    const room = rooms[code];
 
     if (!room) {
-      socket.emit("error", "Room not found.");
+      socket.emit("error", "Room not found. Check the code and try again.");
       return;
     }
 
@@ -62,19 +67,19 @@ io.on("connection", (socket) => {
 
     room.players.push(socket.id);
     room.gameActive = true;
-    socket.join(roomCode);
-    socket.roomCode = roomCode;
+    socket.join(code);
+    socket.roomCode = code;
     socket.playerIndex = 1;
 
-    socket.emit("room_joined", { roomCode, playerIndex: 1 });
-    io.to(roomCode).emit("game_start", { message: "Both players connected. Game starting!" });
-    console.log(`Player joined room: ${roomCode}`);
+    socket.emit("room_joined", { roomCode: code, playerIndex: 1 });
+    io.to(code).emit("game_start");
+    console.log(`Player joined room: [${code}]`);
   });
 
   // --- Handle Move ---
   socket.on("make_move", ({ row, col }) => {
-    const roomCode = socket.roomCode;
-    const room = rooms[roomCode];
+    const code = socket.roomCode;
+    const room = rooms[code];
 
     if (!room || !room.gameActive) return;
     if (room.currentPlayer !== socket.playerIndex) return;
@@ -84,39 +89,39 @@ io.on("connection", (socket) => {
     room.board[row][col] = player;
     room.currentPlayer = room.currentPlayer === 0 ? 1 : 0;
 
-    io.to(roomCode).emit("move_made", { row, col, player });
+    io.to(code).emit("move_made", { row, col, player });
   });
 
-  // --- Handle Win ---
+  // --- Declare Win ---
   socket.on("declare_win", (player) => {
-    const roomCode = socket.roomCode;
-    const room = rooms[roomCode];
+    const code = socket.roomCode;
+    const room = rooms[code];
     if (!room) return;
 
     room.gameActive = false;
-    io.to(roomCode).emit("game_over", { winner: player });
+    io.to(code).emit("game_over", { winner: player });
   });
 
-  // --- Handle Restart ---
+  // --- Request Restart ---
   socket.on("request_restart", () => {
-    const roomCode = socket.roomCode;
-    const room = rooms[roomCode];
+    const code = socket.roomCode;
+    const room = rooms[code];
     if (!room) return;
 
-    room.board = Array.from({ length: 20 }, () => Array(25).fill(""));
+    room.board = Array.from({ length: 25 }, () => Array(20).fill(""));
     room.currentPlayer = 0;
     room.gameActive = true;
 
-    io.to(roomCode).emit("game_restart");
+    io.to(code).emit("game_restart");
   });
 
-  // --- Handle Disconnect ---
+  // --- Disconnect ---
   socket.on("disconnect", () => {
-    const roomCode = socket.roomCode;
-    if (roomCode && rooms[roomCode]) {
-      io.to(roomCode).emit("player_disconnected", "Opponent disconnected.");
-      delete rooms[roomCode];
-      console.log(`Room ${roomCode} closed.`);
+    const code = socket.roomCode;
+    if (code && rooms[code]) {
+      io.to(code).emit("player_disconnected", "Opponent disconnected.");
+      delete rooms[code];
+      console.log(`Room [${code}] closed.`);
     }
     console.log(`Player disconnected: ${socket.id}`);
   });

@@ -1,6 +1,6 @@
 // --- Constants ---
-const ROWS = 20;
-const COLS = 25;
+const ROWS = 25;
+const COLS = 20;
 const WIN_COUNT = 5;
 
 // --- Game State ---
@@ -9,9 +9,10 @@ let gameActive = false;
 let myPlayerIndex = null;
 let currentPlayerIndex = 0;
 let scores = { A: 0, B: 0 };
+let roomCode = null;
 
 // --- Socket Connection ---
-const socket = io();
+const socket = io("https://gobang-f7xl.onrender.com");
 
 // --- HTML Elements ---
 const roomScreen = document.getElementById("room-screen");
@@ -43,8 +44,14 @@ function getSymbol(playerIndex) {
   return playerIndex === 0 ? "A" : "B";
 }
 
+// --- Helper: Get Player Color ---
+function getColor(symbol) {
+  return symbol === "A" ? "#00ffff" : "#00ff00";
+}
+
 // --- Create Room ---
 btnCreate.addEventListener("click", () => {
+  btnCreate.disabled = true;
   socket.emit("create_room");
 });
 
@@ -55,34 +62,39 @@ btnJoin.addEventListener("click", () => {
     showError("Please enter a valid 4 letter room code.");
     return;
   }
+  btnJoin.disabled = true;
   socket.emit("join_room", code);
 });
 
 // --- Socket: Room Created ---
-socket.on("room_created", ({ roomCode, playerIndex }) => {
+socket.on("room_created", ({ roomCode: code, playerIndex }) => {
   myPlayerIndex = playerIndex;
-  roomCodeText.textContent = roomCode;
+  roomCode = code;
+  roomCodeText.textContent = code;
   roomCodeDisplay.classList.remove("hidden");
 });
 
 // --- Socket: Room Joined ---
-socket.on("room_joined", ({ roomCode, playerIndex }) => {
+socket.on("room_joined", ({ roomCode: code, playerIndex }) => {
   myPlayerIndex = playerIndex;
+  roomCode = code;
 });
 
 // --- Socket: Game Start ---
-socket.on("game_start", ({ message }) => {
+socket.on("game_start", () => {
   roomScreen.classList.add("hidden");
   gameScreen.classList.remove("hidden");
   const symbol = getSymbol(myPlayerIndex);
-  playerLabel.innerHTML = `You are playing as: <span style="color:${symbol === "A" ? "#00ffff" : "#00ff00"}">${symbol}</span>`;
-  roomLabel.textContent = `ROOM: ${roomCodeText.textContent}`;
+  playerLabel.innerHTML = `You are: <span style="color:${getColor(symbol)}">${symbol}</span>`;
+  roomLabel.textContent = `ROOM: ${roomCode}`;
   initBoard();
 });
 
 // --- Socket: Error ---
 socket.on("error", (msg) => {
   showError(msg);
+  btnJoin.disabled = false;
+  btnCreate.disabled = false;
 });
 
 // --- Initialize Board ---
@@ -114,8 +126,10 @@ function updateStatus() {
   const currentSymbol = getSymbol(currentPlayerIndex);
   if (currentPlayerIndex === myPlayerIndex) {
     status.textContent = "Your turn";
+    status.style.color = getColor(currentSymbol);
   } else {
     status.textContent = `Waiting for Player ${currentSymbol}...`;
+    status.style.color = "#a8a8b3";
   }
 }
 
@@ -152,7 +166,9 @@ socket.on("move_made", ({ row, col, player }) => {
 
 // --- Socket: Game Over ---
 socket.on("game_over", ({ winner }) => {
+  const symbol = getSymbol(winner === "A" ? 0 : 1);
   status.textContent = `Player ${winner} wins!`;
+  status.style.color = getColor(winner);
   updateScore(winner);
   gameActive = false;
 });
@@ -165,6 +181,7 @@ socket.on("game_restart", () => {
 // --- Socket: Player Disconnected ---
 socket.on("player_disconnected", (msg) => {
   status.textContent = msg;
+  status.style.color = "#e94560";
   gameActive = false;
 });
 
@@ -212,8 +229,8 @@ function highlightWin(winningCells) {
 }
 
 // --- Update Score ---
-function updateScore(result) {
-  scores[result]++;
+function updateScore(winner) {
+  scores[winner]++;
   scoreA.textContent = `A : ${scores.A}`;
   scoreB.textContent = `B : ${scores.B}`;
 }
