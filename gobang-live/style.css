@@ -207,7 +207,6 @@ body {
   cursor: not-allowed;
 }
 
-
 /* --- Hidden Utility --- */
 .hidden {
   display: none;
@@ -247,7 +246,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  background-color: #000000;
+  background-color: #16213e;
   padding: 30px 40px;
   border-radius: 12px;
   width: 220px;
@@ -294,7 +293,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  background-color: #000000;
+  background-color: #16213e;
   padding: 20px 40px;
   border-radius: 12px;
 }
