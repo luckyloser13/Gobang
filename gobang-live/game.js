@@ -240,3 +240,9 @@ function updateScore(winner) {
 restartButton.addEventListener("click", () => {
   socket.emit("request_restart");
 });
+
+// TEMP TEST - remove before pushing
+ roomScreen.style.display = "none";
+ gameScreen.style.display = "flex";
+ gameActive = true;
+ initBoard();
