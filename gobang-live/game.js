@@ -156,7 +156,9 @@ socket.on("move_made", ({ row, col, player }) => {
   const winningCells = checkWin(row, col, player);
   if (winningCells) {
     highlightWin(winningCells);
-    socket.emit("declare_win", player);
+    if (getSymbol(myPlayerIndex) === player) {
+      socket.emit("declare_win", player);
+    }
     return;
   }
 
