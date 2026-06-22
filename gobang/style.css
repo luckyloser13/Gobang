@@ -31,7 +31,7 @@ body {
 
 #mode-selector p {
   font-size: 1.1rem;
-  color: #a8a8b3;
+  color: #db0126;
 }
 
 #btn-start {
@@ -126,7 +126,7 @@ body {
   font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
-  color: #eaeaea;
+  color: #db0126;
   transition: background-color 0.1s;
 }
 
@@ -184,7 +184,7 @@ body {
 
 #status {
   font-size: 1.1rem;
-  color: #a8a8b3;
+  color: #db0126;
 }
 
 #undo {

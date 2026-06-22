@@ -5,9 +5,9 @@
 }
 
 body {
-  background-color: #1a1a2e;
+  background-color: #a8a8b3;
   font-family: Arial, sans-serif;
-  color: #eaeaea;
+  color: #000000;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -32,12 +32,12 @@ body {
 
 #room-screen h1 {
   font-size: 3rem;
-  color: #e94560;
+  color: #db0126;
 }
 
 #room-screen p {
   font-size: 1.1rem;
-  color: #a8a8b3;
+  color: #db0126;
 }
 
 /* --- Room Actions --- */
@@ -53,7 +53,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  background-color: #16213e;
+  background-color: #000000;
   padding: 30px 40px;
   border-radius: 12px;
   width: 220px;
@@ -82,8 +82,8 @@ body {
   text-align: center;
   width: 140px;
   border-radius: 6px;
-  border: 2px solid #e94560;
-  background-color: #1a1a2e;
+  border: 2px solid #db0126;
+  background-color: #000000;
   color: #eaeaea;
   text-transform: uppercase;
   letter-spacing: 4px;
@@ -100,7 +100,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  background-color: #16213e;
+  background-color: #000000;
   padding: 20px 40px;
   border-radius: 12px;
 }
@@ -119,16 +119,15 @@ body {
 
 /* --- Error Message --- */
 #error-message {
-  color: #e94560;
+  color: #db0126;
   font-size: 1rem;
-  background-color: #16213e;
+  background-color: #000000;
   padding: 10px 24px;
   border-radius: 6px;
 }
 
 /* --- Game Screen --- */
 #game-screen {
-  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -141,7 +140,7 @@ body {
 /* --- Board Container --- */
 #board-container {
   overflow: hidden;
-  border: 3px solid #e94560;
+  border: 3px solid #db0126;
   border-radius: 4px;
   flex-shrink: 0;
 }
@@ -149,38 +148,38 @@ body {
 /* --- Board --- */
 #board {
   display: grid;
-  grid-template-columns: repeat(20, 32px);
-  grid-template-rows: repeat(25, 32px);
+  grid-template-columns: repeat(20, 40px);
+  grid-template-rows: repeat(21, 40px);
   gap: 2px;
-  background-color: #e94560;
+  background-color: #db0126;
   padding: 2px;
 }
 
 /* --- Cells --- */
 .cell {
-  width: 32px;
-  height: 32px;
-  background-color: #1a1a2e;
+  width: 40px;
+  height: 40px;
+  background-color: #a8a8b3;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
-  color: #eaeaea;
+  color: #db0126;
   transition: background-color 0.1s;
 }
 
 .cell:hover {
-  background-color: #16213e;
+  background-color: #000000;
 }
 
 .cell.player-a {
-  color: #00ffff;
+  color: #000000;
 }
 
 .cell.player-b {
-  color: #00ff00;
+  color: #000000;
 }
 
 .cell.winning {
@@ -198,7 +197,7 @@ body {
 
 #sidebar h1 {
   font-size: 2rem;
-  color: #e94560;
+  color: #db0126;
 }
 
 #room-label {
@@ -230,11 +229,11 @@ body {
 }
 
 #score-a {
-  color: #00ffff;
+  color: #000000;
 }
 
 #score-b {
-  color: #00ff00;
+  color: #000000;
 }
 
 /* --- Buttons --- */
@@ -242,7 +241,7 @@ body {
   margin-top: 10px;
   padding: 10px 30px;
   font-size: 1rem;
-  background-color: #e94560;
+  background-color: #db0126;
   color: white;
   border: none;
   border-radius: 6px;
@@ -250,5 +249,5 @@ body {
 }
 
 #restart:hover {
-  background-color: #c73652;
+  background-color: #db0126;
 }

@@ -1,5 +1,5 @@
 // --- Constants ---
-const ROWS = 25;
+const ROWS = 21;
 const COLS = 20;
 const WIN_COUNT = 5;
 
@@ -84,6 +84,7 @@ socket.on("room_joined", ({ roomCode: code, playerIndex }) => {
 socket.on("game_start", () => {
   roomScreen.classList.add("hidden");
   gameScreen.classList.remove("hidden");
+  gameScreen.style.display = "flex";
   const symbol = getSymbol(myPlayerIndex);
   playerLabel.innerHTML = `You are: <span style="color:${getColor(symbol)}">${symbol}</span>`;
   roomLabel.textContent = `ROOM: ${roomCode}`;
