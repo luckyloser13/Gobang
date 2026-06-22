@@ -112,7 +112,7 @@ body {
 }
 
 #waiting-text {
-  color: #a8a8b3;
+  color: #000000;
   font-size: 0.95rem;
 }
 
@@ -201,13 +201,13 @@ body {
 
 #room-label {
   font-size: 0.9rem;
-  color: #a8a8b3;
+  color: #000000;
   letter-spacing: 2px;
 }
 
 #player-label {
   font-size: 1rem;
-  color: #a8a8b3;
+  color: #000000;
 }
 
 #player-label span {
@@ -216,7 +216,7 @@ body {
 
 #status {
   font-size: 1.1rem;
-  color: #a8a8b3;
+  color: #000000;
 }
 
 /* --- Scoreboard --- */
