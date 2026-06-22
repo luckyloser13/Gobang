@@ -1,5 +1,5 @@
 // --- Constants ---
-const ROWS = 21;
+const ROWS = 25;
 const COLS = 20;
 const WIN_COUNT = 5;
 
@@ -156,9 +156,7 @@ socket.on("move_made", ({ row, col, player }) => {
   const winningCells = checkWin(row, col, player);
   if (winningCells) {
     highlightWin(winningCells);
-    if (getSymbol(myPlayerIndex) === player) {
-      socket.emit("declare_win", player);
-    }
+    socket.emit("declare_win", player);
     return;
   }
 
