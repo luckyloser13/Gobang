@@ -242,7 +242,7 @@ restartButton.addEventListener("click", () => {
 });
 
 // TEMP TEST - remove before pushing
- roomScreen.style.display = "none";
- gameScreen.style.display = "flex";
- gameActive = true;
- initBoard();
+// roomScreen.style.display = "none";
+// gameScreen.style.display = "flex";
+// gameActive = true;
+// initBoard();
