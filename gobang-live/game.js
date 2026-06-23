@@ -178,9 +178,6 @@ socket.on("game_over", ({ winner }) => {
 
 // --- Socket: Game Restart ---
 socket.on("game_restart", () => {
-  myPlayerIndex = myPlayerIndex === 0 ? 1 : 0;
-  const symbol = getSymbol(myPlayerIndex);
-  playerLabel.innerHTML = `You are: <span style="color:${getColor(symbol)}">${symbol}</span>`;
   initBoard();
 });
 

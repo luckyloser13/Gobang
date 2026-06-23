@@ -103,19 +103,23 @@ io.on("connection", (socket) => {
   });
 
   // --- Request Restart ---
-  socket.on("request_restart", () => {
+  socket.on("request_restart", async () => {
     const code = socket.roomCode;
     const room = rooms[code];
     if (!room) return;
 
-    room.board = Array.from({ length: 25 }, () => Array(20).fill(""));
+    room.board = Array.from({ length: 21 }, () => Array(20).fill(""));
     room.currentPlayer = 0;
     room.gameActive = true;
 
-    // swap player indices
-    room.players.reverse();
-    io.to(code).emit("game_restart", { playerIndexes: [0, 1] });
-      });
+    // swap player indices on each socket
+    const socketsInRoom = await io.in(code).fetchSockets();
+    socketsInRoom.forEach(s => {
+      s.playerIndex = s.playerIndex === 0 ? 1 : 0;
+    });
+
+    io.to(code).emit("game_restart");
+  });
 
   // --- Disconnect ---
   socket.on("disconnect", () => {
