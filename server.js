@@ -112,8 +112,10 @@ io.on("connection", (socket) => {
     room.currentPlayer = 0;
     room.gameActive = true;
 
-    io.to(code).emit("game_restart");
-  });
+    // swap player indices
+    room.players.reverse();
+    io.to(code).emit("game_restart", { playerIndexes: [0, 1] });
+      });
 
   // --- Disconnect ---
   socket.on("disconnect", () => {
@@ -132,3 +134,4 @@ const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+

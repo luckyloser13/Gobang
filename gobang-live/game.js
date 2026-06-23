@@ -157,7 +157,9 @@ socket.on("move_made", ({ row, col, player }) => {
   const winningCells = checkWin(row, col, player);
   if (winningCells) {
     highlightWin(winningCells);
-    socket.emit("declare_win", player);
+    if (getSymbol(myPlayerIndex) === player) {
+      socket.emit("declare_win", player);
+    }
     return;
   }
 
@@ -176,6 +178,9 @@ socket.on("game_over", ({ winner }) => {
 
 // --- Socket: Game Restart ---
 socket.on("game_restart", () => {
+  myPlayerIndex = myPlayerIndex === 0 ? 1 : 0;
+  const symbol = getSymbol(myPlayerIndex);
+  playerLabel.innerHTML = `You are: <span style="color:${getColor(symbol)}">${symbol}</span>`;
   initBoard();
 });
 
