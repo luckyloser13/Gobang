@@ -37,6 +37,7 @@ io.on("connection", (socket) => {
       players: [socket.id],
       board: Array.from({ length: 21 }, () => Array(20).fill("")),
       currentPlayer: 0,
+        firstPlayer: 0,
       gameActive: false
     };
     socket.join(code);
@@ -103,22 +104,17 @@ io.on("connection", (socket) => {
   });
 
   // --- Request Restart ---
-  socket.on("request_restart", async () => {
+  socket.on("request_restart", () => {
     const code = socket.roomCode;
     const room = rooms[code];
     if (!room) return;
 
     room.board = Array.from({ length: 21 }, () => Array(20).fill(""));
-    room.currentPlayer = 0;
     room.gameActive = true;
+    room.firstPlayer = room.firstPlayer === 0 ? 1 : 0;
+    room.currentPlayer = room.firstPlayer;
 
-    // swap player indices on each socket
-    const socketsInRoom = await io.in(code).fetchSockets();
-    socketsInRoom.forEach(s => {
-      s.playerIndex = s.playerIndex === 0 ? 1 : 0;
-    });
-
-    io.to(code).emit("game_restart");
+    io.to(code).emit("game_restart", { firstPlayer: room.firstPlayer });
   });
 
   // --- Disconnect ---

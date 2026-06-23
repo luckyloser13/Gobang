@@ -101,7 +101,6 @@ socket.on("error", (msg) => {
 // --- Initialize Board ---
 function initBoard() {
   board = Array.from({ length: ROWS }, () => Array(COLS).fill(""));
-  currentPlayerIndex = 0;
   gameActive = true;
   updateStatus();
   renderBoard();
@@ -177,7 +176,11 @@ socket.on("game_over", ({ winner }) => {
 });
 
 // --- Socket: Game Restart ---
-socket.on("game_restart", () => {
+socket.on("game_restart", ({ firstPlayer }) => {
+  myPlayerIndex = myPlayerIndex === 0 ? 1 : 0;
+  currentPlayerIndex = firstPlayer;
+  const symbol = getSymbol(myPlayerIndex);
+  playerLabel.innerHTML = `You are: <span style="color:${getColor(symbol)}">${symbol}</span>`;
   initBoard();
 });
 
