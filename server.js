@@ -85,7 +85,6 @@ io.on("connection", (socket) => {
     if (!room || !room.gameActive) return;
     if (room.board[row][col] !== "") return;
 
-    // if first move hasnt been made yet, set current player to whoever clicked
     if (room.firstMoveMade) {
       if (room.currentPlayer !== socket.playerIndex) return;
     } else {
@@ -97,7 +96,7 @@ io.on("connection", (socket) => {
     room.board[row][col] = player;
     room.currentPlayer = room.currentPlayer === 0 ? 1 : 0;
 
-    io.to(code).emit("move_made", { row, col, player });
+    io.to(code).emit("move_made", { row, col, player, nextPlayer: room.currentPlayer });
   });
 
   // --- Declare Win ---

@@ -153,19 +153,8 @@ function unlockBoard() {
 }
 
 // --- Socket: Move Made ---
-socket.on("move_made", ({ row, col, player }) => {
-  // sync myPlayerIndex based on who went first
-  if (!firstMoveMade) {
-    firstMoveMade = true;
-    if (getSymbol(myPlayerIndex) === player) {
-      myPlayerIndex = currentPlayerIndex;
-    } else {
-      myPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
-    }
-    const symbol = getSymbol(myPlayerIndex);
-    playerLabel.innerHTML = `You are: <span style="color:${getColor(symbol)}">${symbol}</span>`;
-  }
-
+socket.on("move_made", ({ row, col, player, nextPlayer }) => {
+  firstMoveMade = true;
   board[row][col] = player;
   const index = row * COLS + col;
   const cell = boardEl.children[index];
@@ -180,6 +169,10 @@ socket.on("move_made", ({ row, col, player }) => {
     }
     return;
   }
+
+  currentPlayerIndex = nextPlayer;
+  updateStatus();
+});
 
   currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
   updateStatus();
