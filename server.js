@@ -37,7 +37,6 @@ io.on("connection", (socket) => {
       players: [socket.id],
       board: Array.from({ length: 21 }, () => Array(20).fill("")),
       currentPlayer: 0,
-        firstPlayer: 0,
       gameActive: false
     };
     socket.join(code);
@@ -110,22 +109,10 @@ io.on("connection", (socket) => {
     if (!room) return;
 
     room.board = Array.from({ length: 21 }, () => Array(20).fill(""));
+    room.currentPlayer = 0;
     room.gameActive = true;
-    room.firstPlayer = room.firstPlayer === 0 ? 1 : 0;
-    room.currentPlayer = room.firstPlayer;
 
-    // swap playerIndex on both sockets directly
-    const socket0 = io.sockets.sockets.get(room.players[0]);
-    const socket1 = io.sockets.sockets.get(room.players[1]);
-    if (socket0) socket0.playerIndex = socket0.playerIndex === 0 ? 1 : 0;
-    if (socket1) socket1.playerIndex = socket1.playerIndex === 0 ? 1 : 0;
-
-    // debug logs
-    console.log("After restart - room.currentPlayer:", room.currentPlayer);
-    console.log("socket0 playerIndex:", socket0 ? socket0.playerIndex : "not found");
-    console.log("socket1 playerIndex:", socket1 ? socket1.playerIndex : "not found");
-
-    io.to(code).emit("game_restart", { firstPlayer: room.firstPlayer });
+    io.to(code).emit("game_restart");
   });
 
   // --- Disconnect ---
