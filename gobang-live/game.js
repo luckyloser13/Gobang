@@ -174,10 +174,6 @@ socket.on("move_made", ({ row, col, player, nextPlayer }) => {
   updateStatus();
 });
 
-  currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
-  updateStatus();
-});
-
 // --- Socket: Game Over ---
 socket.on("game_over", ({ winner }) => {
   const symbol = getSymbol(winner === "A" ? 0 : 1);
