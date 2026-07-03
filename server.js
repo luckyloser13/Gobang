@@ -82,7 +82,6 @@ io.on("connection", (socket) => {
     const room = rooms[code];
 
     if (!room || !room.gameActive) return;
-    if (room.currentPlayer !== socket.playerIndex) return;
     if (room.board[row][col] !== "") return;
 
     const player = socket.playerIndex === 0 ? "A" : "B";
