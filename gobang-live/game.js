@@ -180,6 +180,8 @@ socket.on("game_over", ({ winner }) => {
 socket.on("game_restart", ({ firstPlayer }) => {
   myPlayerIndex = myPlayerIndex === 0 ? 1 : 0;
   currentPlayerIndex = firstPlayer;
+  console.log("After restart - myPlayerIndex:", myPlayerIndex);
+  console.log("After restart - currentPlayerIndex:", currentPlayerIndex);
   const symbol = getSymbol(myPlayerIndex);
   playerLabel.innerHTML = `You are: <span style="color:${getColor(symbol)}">${symbol}</span>`;
   board = Array.from({ length: ROWS }, () => Array(COLS).fill(""));
