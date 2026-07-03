@@ -125,13 +125,8 @@ function renderBoard() {
 // --- Update Status ---
 function updateStatus() {
   const currentSymbol = getSymbol(currentPlayerIndex);
-  if (currentPlayerIndex === myPlayerIndex) {
-    status.textContent = "Your turn";
-    status.style.color = getColor(currentSymbol);
-  } else {
-    status.textContent = `Waiting for Player ${currentSymbol}...`;
-    status.style.color = "#a8a8b3";
-  }
+  status.textContent = `Player ${currentSymbol}'s turn`;
+  status.style.color = getColor(currentSymbol);
 }
 
 // --- Handle Cell Click ---
@@ -143,6 +138,17 @@ function handleCellClick(e) {
   if (board[row][col] !== "") return;
 
   socket.emit("make_move", { row, col });
+  lockBoard();
+}
+
+// --- Board Lock ---
+function lockBoard() {
+  boardEl.style.pointerEvents = "none";
+}
+
+// --- Board Unlock ---
+function unlockBoard() {
+  boardEl.style.pointerEvents = "auto";
 }
 
 // --- Socket: Move Made ---
@@ -164,6 +170,7 @@ socket.on("move_made", ({ row, col, player }) => {
 
   currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
   updateStatus();
+  unlockBoard();
 });
 
 // --- Socket: Game Over ---
@@ -180,6 +187,7 @@ socket.on("game_restart", () => {
   board = Array.from({ length: ROWS }, () => Array(COLS).fill(""));
   currentPlayerIndex = 0;
   gameActive = true;
+  unlockBoard();
   updateStatus();
   renderBoard();
 });
