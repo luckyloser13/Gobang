@@ -120,6 +120,11 @@ io.on("connection", (socket) => {
     if (socket0) socket0.playerIndex = socket0.playerIndex === 0 ? 1 : 0;
     if (socket1) socket1.playerIndex = socket1.playerIndex === 0 ? 1 : 0;
 
+    // debug logs
+    console.log("After restart - room.currentPlayer:", room.currentPlayer);
+    console.log("socket0 playerIndex:", socket0 ? socket0.playerIndex : "not found");
+    console.log("socket1 playerIndex:", socket1 ? socket1.playerIndex : "not found");
+
     io.to(code).emit("game_restart", { firstPlayer: room.firstPlayer });
   });
 
