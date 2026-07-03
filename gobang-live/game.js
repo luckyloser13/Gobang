@@ -179,15 +179,13 @@ socket.on("game_over", ({ winner }) => {
 // --- Socket: Game Restart ---
 socket.on("game_restart", ({ firstPlayer }) => {
   myPlayerIndex = myPlayerIndex === 0 ? 1 : 0;
-  currentPlayerIndex = firstPlayer;
-  console.log("After restart - myPlayerIndex:", myPlayerIndex);
-  console.log("After restart - currentPlayerIndex:", currentPlayerIndex);
   const symbol = getSymbol(myPlayerIndex);
   playerLabel.innerHTML = `You are: <span style="color:${getColor(symbol)}">${symbol}</span>`;
   board = Array.from({ length: ROWS }, () => Array(COLS).fill(""));
   gameActive = true;
-  updateStatus();
   renderBoard();
+  currentPlayerIndex = firstPlayer;
+  updateStatus();
 });
 
 // --- Socket: Player Disconnected ---
