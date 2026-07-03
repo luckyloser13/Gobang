@@ -105,7 +105,7 @@ function initBoard() {
   gameActive = true;
   updateStatus();
   renderBoard();
-}git pus
+}
 
 // --- Render Board ---
 function renderBoard() {
