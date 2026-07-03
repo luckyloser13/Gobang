@@ -140,7 +140,6 @@ function handleCellClick(e) {
   const col = parseInt(e.target.dataset.col);
 
   if (!gameActive) return;
-  if (currentPlayerIndex !== myPlayerIndex) return;
   if (board[row][col] !== "") return;
 
   socket.emit("make_move", { row, col });
