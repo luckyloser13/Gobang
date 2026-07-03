@@ -10,6 +10,7 @@ let myPlayerIndex = null;
 let currentPlayerIndex = 0;
 let scores = { A: 0, B: 0 };
 let roomCode = null;
+let firstMoveMade = false;
 
 // --- Socket Connection ---
 const socket = io("https://gobang-f7xl.onrender.com");
@@ -136,9 +137,9 @@ function handleCellClick(e) {
 
   if (!gameActive) return;
   if (board[row][col] !== "") return;
+  if (firstMoveMade && currentPlayerIndex !== myPlayerIndex) return;
 
   socket.emit("make_move", { row, col });
-  lockBoard();
 }
 
 // --- Board Lock ---
@@ -153,6 +154,7 @@ function unlockBoard() {
 
 // --- Socket: Move Made ---
 socket.on("move_made", ({ row, col, player }) => {
+  firstMoveMade = true;
   board[row][col] = player;
   const index = row * COLS + col;
   const cell = boardEl.children[index];
@@ -170,7 +172,6 @@ socket.on("move_made", ({ row, col, player }) => {
 
   currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
   updateStatus();
-  unlockBoard();
 });
 
 // --- Socket: Game Over ---
@@ -184,6 +185,7 @@ socket.on("game_over", ({ winner }) => {
 
 // --- Socket: Game Restart ---
 socket.on("game_restart", () => {
+  firstMoveMade = false;
   board = Array.from({ length: ROWS }, () => Array(COLS).fill(""));
   currentPlayerIndex = 0;
   gameActive = true;

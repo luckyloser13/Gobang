@@ -37,6 +37,7 @@ io.on("connection", (socket) => {
       players: [socket.id],
       board: Array.from({ length: 21 }, () => Array(20).fill("")),
       currentPlayer: 0,
+      firstMoveMade: false,
       gameActive: false
     };
     socket.join(code);
@@ -84,6 +85,14 @@ io.on("connection", (socket) => {
     if (!room || !room.gameActive) return;
     if (room.board[row][col] !== "") return;
 
+    // if first move hasnt been made yet, set current player to whoever clicked
+    if (room.firstMoveMade) {
+      if (room.currentPlayer !== socket.playerIndex) return;
+    } else {
+      room.firstMoveMade = true;
+      room.currentPlayer = socket.playerIndex;
+    }
+
     const player = socket.playerIndex === 0 ? "A" : "B";
     room.board[row][col] = player;
     room.currentPlayer = room.currentPlayer === 0 ? 1 : 0;
@@ -109,6 +118,7 @@ io.on("connection", (socket) => {
 
     room.board = Array.from({ length: 21 }, () => Array(20).fill(""));
     room.currentPlayer = 0;
+    room.firstMoveMade = false;
     room.gameActive = true;
 
     io.to(code).emit("game_restart");
