@@ -114,6 +114,12 @@ io.on("connection", (socket) => {
     room.firstPlayer = room.firstPlayer === 0 ? 1 : 0;
     room.currentPlayer = room.firstPlayer;
 
+    // swap playerIndex on both sockets directly
+    const socket0 = io.sockets.sockets.get(room.players[0]);
+    const socket1 = io.sockets.sockets.get(room.players[1]);
+    if (socket0) socket0.playerIndex = socket0.playerIndex === 0 ? 1 : 0;
+    if (socket1) socket1.playerIndex = socket1.playerIndex === 0 ? 1 : 0;
+
     io.to(code).emit("game_restart", { firstPlayer: room.firstPlayer });
   });
 
