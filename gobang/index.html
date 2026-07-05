@@ -8,15 +8,47 @@
   </head>
   <body>
 
-    <!-- Mode Selector Overlay -->
-    <div id="mode-selector">
+    <!-- Step 1: Player Count -->
+    <div id="screen-player-count">
       <h1>Gobang</h1>
-      <p>First to get 5 in a row wins</p>
-      <button id="btn-start">Start Game</button>
+      <p>How many players?</p>
+      <div id="player-count-options">
+        <button class="count-btn" data-count="2">2</button>
+        <button class="count-btn" data-count="3">3</button>
+        <button class="count-btn" data-count="4">4</button>
+        <button class="count-btn" data-count="5">5</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Symbol Selection -->
+    <div id="screen-symbol-select" class="hidden">
+      <h1>Gobang</h1>
+      <p id="symbol-prompt">Player 1, choose your symbol</p>
+      <input id="symbol-input" type="text" maxlength="1" placeholder="?" />
+      <div id="symbol-error" class="hidden">Symbol already taken or invalid!</div>
+      <button id="btn-confirm-symbol">Confirm</button>
+      <div id="symbols-chosen"></div>
+    </div>
+
+    <!-- Step 3: Board Size -->
+    <div id="screen-board-size" class="hidden">
+      <h1>Gobang</h1>
+      <p>Set board size</p>
+      <div id="board-size-inputs">
+        <div>
+          <label>Rows</label>
+          <input id="input-rows" type="number" min="10" max="50" value="21" />
+        </div>
+        <div>
+          <label>Columns</label>
+          <input id="input-cols" type="number" min="10" max="50" value="20" />
+        </div>
+      </div>
+      <button id="btn-start-game">Start Game</button>
     </div>
 
     <!-- Game Screen -->
-    <div id="game-screen">
+    <div id="game-screen" class="hidden">
 
       <div id="board-container">
         <div id="board"></div>
@@ -24,16 +56,14 @@
 
       <div id="sidebar">
         <h1>Gobang</h1>
-        <div id="status">Player A's turn</div>
-        <div id="scoreboard">
-          <span id="score-a">A : 0</span>
-          <span id="score-b">B : 0</span>
-        </div>
+        <div id="status"></div>
+        <div id="scoreboard"></div>
         <button id="restart">Restart</button>
         <button id="undo">Undo (5)</button>
       </div>
 
     </div>
+
     <script src="game.js"></script>
   </body>
 </html>

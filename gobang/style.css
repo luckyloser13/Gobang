@@ -5,7 +5,7 @@
 }
 
 body {
-  background-color: #a8a8b3;
+  background-color: #ffffff;
   font-family: Arial, sans-serif;
   color: #000000;
   min-height: 100vh;
@@ -14,43 +14,169 @@ body {
   justify-content: center;
 }
 
-/* --- Mode Selector --- */
-#mode-selector {
+/* --- Hidden Utility --- */
+.hidden {
+  display: none;
+}
+
+/* --- Shared Screen Styles --- */
+#screen-player-count,
+#screen-symbol-select,
+#screen-board-size {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 24px;
   text-align: center;
+  min-height: 100vh;
 }
 
-#mode-selector h1 {
+h1 {
   font-size: 3rem;
-  color: #db0126;
+  color: #000000;
 }
 
-#mode-selector p {
-  font-size: 1.1rem;
-  color: #db0126;
+p {
+  font-size: 1.2rem;
+  color: #000000;
 }
 
-#btn-start {
-  padding: 14px 50px;
-  font-size: 1.1rem;
-  background-color: #db0126;
-  color: white;
+/* --- Player Count Buttons --- */
+#player-count-options {
+  display: flex;
+  gap: 16px;
+}
+
+.count-btn {
+  width: 70px;
+  height: 70px;
+  font-size: 1.8rem;
+  font-weight: bold;
+  background-color: #000000;
+  color: #ffffff;
   border: none;
   border-radius: 8px;
   cursor: pointer;
 }
 
-#btn-start:hover {
-  background-color: #db0126;
+.count-btn:hover {
+  background-color: #333333;
+}
+
+/* --- Symbol Input --- */
+#symbol-input {
+  width: 80px;
+  height: 80px;
+  font-size: 2.5rem;
+  text-align: center;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #000000;
+  text-transform: uppercase;
+}
+
+#symbol-input:focus {
+  outline: none;
+  border-color: #555555;
+}
+
+#symbol-error {
+  color: #cc0000;
+  font-size: 0.95rem;
+}
+
+#btn-confirm-symbol {
+  padding: 12px 40px;
+  font-size: 1.1rem;
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#btn-confirm-symbol:hover {
+  background-color: #333333;
+}
+
+/* --- Symbols Chosen Display --- */
+#symbols-chosen {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.chosen-symbol {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border: 2px solid #000000;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+  color: #000000;
+}
+
+/* --- Board Size Inputs --- */
+#board-size-inputs {
+  display: flex;
+  gap: 40px;
+}
+
+#board-size-inputs div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+#board-size-inputs label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000000;
+}
+
+#input-rows,
+#input-cols {
+  width: 80px;
+  height: 50px;
+  font-size: 1.4rem;
+  text-align: center;
+  border: 3px solid #000000;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+#input-rows:focus,
+#input-cols:focus {
+  outline: none;
+  border-color: #555555;
+}
+
+#btn-start-game {
+  padding: 12px 40px;
+  font-size: 1.1rem;
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#btn-start-game:hover {
+  background-color: #333333;
 }
 
 /* --- Game Screen --- */
 #game-screen {
-  display: none;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -60,114 +186,53 @@ body {
   padding: 20px;
 }
 
-/* --- Top Bar --- */
-#top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 800px;
-}
-
-#top-bar h1 {
-  font-size: 2rem;
-  color: #db0126;
-}
-
-#status {
-  font-size: 1.2rem;
-  color: #000000;
-}
-
-/* --- Scoreboard --- */
-#scoreboard {
-  display: flex;
-  gap: 40px;
-  font-size: 1.2rem;
-}
-
-#score-a {
-  color: #000000;
-}
-
-#score-draw {
-  color: #000000;
-}
-
-#score-b {
-  color: #000000;
-}
-
 /* --- Board Container --- */
 #board-container {
-  overflow: hidden;
-  border: 3px solid #a8a8b3;
+  overflow: auto;
+  border: 3px solid #000000;
   border-radius: 4px;
   flex-shrink: 0;
+  max-width: 75vw;
+  max-height: 90vh;
 }
 
 /* --- Board --- */
 #board {
   display: grid;
-  grid-template-columns: repeat(20, 40px);
-  grid-template-rows: repeat(21, 40px);
   gap: 2px;
   background-color: #000000;
   padding: 2px;
 }
 
+/* --- Cells --- */
 .cell {
   width: 40px;
   height: 40px;
-  background-color: #a8a8b3;
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
   cursor: pointer;
-  color: #db0126;
+  color: #000000;
   transition: background-color 0.1s;
 }
 
 .cell:hover {
-  background-color: #000000;
-}
-
-.cell.player-a {
-  color: #000000;
-}
-
-.cell.player-b {
-  color: #000000;
+  background-color: #f0f0f0;
 }
 
 .cell.winning {
-  background-color: #2a9d3e;
+  background-color: #cccccc;
 }
 
-/* --- Restart Button --- */
-#restart {
-  margin-top: 10px;
-  padding: 10px 30px;
-  font-size: 1rem;
-  background-color: #db0126;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-#restart:hover {
-  background-color: #db0126;
-}
-
+/* --- Sidebar --- */
 #sidebar {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
   min-width: 200px;
-  padding-top: 10px;
 }
 
 #sidebar h1 {
@@ -175,31 +240,47 @@ body {
   color: #000000;
 }
 
+#status {
+  font-size: 1.1rem;
+  color: #000000;
+}
+
+/* --- Scoreboard --- */
 #scoreboard {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  font-size: 1.2rem;
-}
-
-#status {
+  gap: 8px;
   font-size: 1.1rem;
-  color: #db0126;
+  color: #000000;
 }
 
-#undo {
-  margin-top: 10px;
+/* --- Buttons --- */
+#restart {
   padding: 10px 30px;
   font-size: 1rem;
   background-color: #000000;
-  color: #eaeaea;
-  border: 2px solid #db0126;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#restart:hover {
+  background-color: #333333;
+}
+
+#undo {
+  padding: 10px 30px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
   border-radius: 6px;
   cursor: pointer;
 }
 
 #undo:hover {
-  background-color: #000000;
+  background-color: #f0f0f0;
 }
 
 #undo:disabled {
