@@ -250,3 +250,7 @@ body {
 #restart:hover {
   background-color: #db0126;
 }
+
+.cell.last-move {
+  background-color: #cccccc;
+}
