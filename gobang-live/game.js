@@ -1,7 +1,7 @@
 // --- Constants ---
 const ROWS = 21;
 const COLS = 20;
-const WIN_COUNT = 6;
+const WIN_COUNT = 5;
 
 // --- Game State ---
 let board = [];
