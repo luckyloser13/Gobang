@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    
+
     <div id="mode-selector">
       <h2>Select Game Mode</h2>
       <button id="btn-two-player">2 Player</button>
@@ -15,13 +15,14 @@
     </div>
 
     <h1>Tic Tac Toe</h1>
-
     <div id="status">Player X's turn</div>
+
     <div id="scoreboard">
       <span id="score-x">X : 0</span>
       <span id="score-draw">Draw : 0</span>
       <span id="score-o">O : 0</span>
     </div>
+
     <div id="board">
       <div class="cell" data-index="0"></div>
       <div class="cell" data-index="1"></div>
@@ -34,6 +35,7 @@
       <div class="cell" data-index="8"></div>
     </div>
 
+    <div id="phase-label">Phase: Placement</div>
     <button id="restart">Restart</button>
 
     <script src="game.js"></script>

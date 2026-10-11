@@ -123,3 +123,11 @@ h1 {
 #btn-two-player:hover, #btn-vs-ai:hover {
   background-color: #c73652;
 }
+
+.cell.selected {
+  background-color: #ffd700;
+}
+
+.cell.highlight {
+  background-color: #90ee90;
+}

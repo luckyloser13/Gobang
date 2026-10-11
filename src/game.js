@@ -1,18 +1,36 @@
-// --- Game State ---
+// --- Board State ---
 let board = ["", "", "", "", "", "", "", "", ""];
 let currentPlayer = "X";
 let gameActive = false;
 let vsAI = false;
 let scores = { X: 0, O: 0, Draw: 0 };
 
+// --- Phase Tracking ---
+let phase = "placement"; // "placement" or "movement"
+let piecesPlaced = { X: 0, O: 0 };
+let selectedCell = null; // index of selected piece in movement phase
+
 // --- Win Conditions ---
 const winConditions = [
-  [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-  [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-  [0, 4, 8], [2, 4, 6],             // diagonals
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6],
 ];
 
-// --- Grab HTML Elements ---
+// --- Adjacent Cells ---
+const adjacentCells = {
+  0: [1, 3, 4],
+  1: [0, 2, 3, 4, 5],
+  2: [1, 4, 5],
+  3: [0, 1, 4, 6, 7],
+  4: [0, 1, 2, 3, 5, 6, 7, 8],
+  5: [1, 2, 4, 7, 8],
+  6: [3, 4, 7],
+  7: [3, 4, 5, 6, 8],
+  8: [4, 5, 7],
+};
+
+// --- HTML Elements ---
 const cells = document.querySelectorAll(".cell");
 const status = document.getElementById("status");
 const restartButton = document.getElementById("restart");
@@ -22,6 +40,7 @@ const scoreDraw = document.getElementById("score-draw");
 const modeSelector = document.getElementById("mode-selector");
 const btnTwoPlayer = document.getElementById("btn-two-player");
 const btnVsAI = document.getElementById("btn-vs-ai");
+const phaseLabel = document.getElementById("phase-label");
 
 // --- Mode Selection ---
 function startGame(mode) {
@@ -29,8 +48,15 @@ function startGame(mode) {
   gameActive = true;
   currentPlayer = "X";
   board = ["", "", "", "", "", "", "", "", ""];
-  cells.forEach((cell) => (cell.textContent = ""));
+  phase = "placement";
+  piecesPlaced = { X: 0, O: 0 };
+  selectedCell = null;
+  cells.forEach((cell) => {
+    cell.textContent = "";
+    cell.classList.remove("selected", "highlight");
+  });
   status.textContent = "Player X's turn";
+  phaseLabel.textContent = "Phase: Placement";
   modeSelector.style.display = "none";
 }
 
@@ -39,23 +65,36 @@ btnVsAI.addEventListener("click", () => startGame("ai"));
 
 // --- Handle Cell Click ---
 function handleCellClick(e) {
-  const index = e.target.getAttribute("data-index");
+  const index = parseInt(e.target.getAttribute("data-index"));
+  if (!gameActive) return;
 
-  if (board[index] !== "" || !gameActive) return;
+  if (phase === "placement") {
+    handlePlacement(index);
+  } else {
+    handleMovement(index);
+  }
+}
 
-  makeMove(index, currentPlayer);
+// --- Placement Phase ---
+function handlePlacement(index) {
+  if (board[index] !== "") return;
+  if (piecesPlaced[currentPlayer] >= 3) return;
+
+  board[index] = currentPlayer;
+  cells[index].textContent = currentPlayer;
+  piecesPlaced[currentPlayer]++;
 
   if (checkWin(board, currentPlayer)) {
-    status.textContent = `Player ${currentPlayer} wins!`;
-    updateScore(currentPlayer);
-    gameActive = false;
+    endGame(currentPlayer);
     return;
   }
 
-  if (checkDraw(board)) {
-    status.textContent = "It's a draw!";
-    updateScore("Draw");
-    gameActive = false;
+  // check if both players placed all 3 pieces
+  if (piecesPlaced.X === 3 && piecesPlaced.O === 3) {
+    phase = "movement";
+    phaseLabel.textContent = "Phase: Movement";
+    status.textContent = `Player ${currentPlayer === "X" ? "O" : "X"}'s turn — select a piece to move`;
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
     return;
   }
 
@@ -63,86 +102,106 @@ function handleCellClick(e) {
   status.textContent = `Player ${currentPlayer}'s turn`;
 
   if (vsAI && currentPlayer === "O" && gameActive) {
-    setTimeout(aiMove, 400);
+    setTimeout(aiPlacement, 400);
   }
 }
 
-// --- Make a Move ---
-function makeMove(index, player) {
-  board[index] = player;
-  cells[index].textContent = player;
-}
-
-// --- AI Move ---
-function aiMove() {
-  const bestIndex = getBestMove(board);
-  makeMove(bestIndex, "O");
-
-  if (checkWin(board, "O")) {
-    status.textContent = "AI wins!";
-    updateScore("O");
-    gameActive = false;
+// --- Movement Phase ---
+function handleMovement(index) {
+  // if no piece selected yet
+  if (selectedCell === null) {
+    if (board[index] !== currentPlayer) {
+      status.textContent = `Select one of your own pieces to move!`;
+      return;
+    }
+    selectedCell = index;
+    cells[index].classList.add("selected");
+    highlightMoves(index);
     return;
   }
 
-  if (checkDraw(board)) {
-    status.textContent = "It's a draw!";
-    updateScore("Draw");
-    gameActive = false;
+  // deselect if clicking the same cell
+  if (selectedCell === index) {
+    cells[index].classList.remove("selected");
+    clearHighlights();
+    selectedCell = null;
     return;
   }
 
-  currentPlayer = "X";
-  status.textContent = "Player X's turn";
-}
+  // try to move to clicked cell
+  if (adjacentCells[selectedCell].includes(index) && board[index] === "") {
+    // move the piece
+    board[index] = currentPlayer;
+    board[selectedCell] = "";
+    cells[index].textContent = currentPlayer;
+    cells[selectedCell].textContent = "";
+    cells[selectedCell].classList.remove("selected");
+    clearHighlights();
+    selectedCell = null;
 
-// --- Minimax ---
-function minimax(boardState, depth, isMaximizing) {
-  if (checkWin(boardState, "O")) return 10 - depth;
-  if (checkWin(boardState, "X")) return depth - 10;
-  if (checkDraw(boardState)) return 0;
+    if (checkWin(board, currentPlayer)) {
+      endGame(currentPlayer);
+      return;
+    }
 
-  if (isMaximizing) {
-    let best = -Infinity;
-    boardState.forEach((cell, i) => {
-      if (cell === "") {
-        boardState[i] = "O";
-        best = Math.max(best, minimax(boardState, depth + 1, false));
-        boardState[i] = "";
-      }
-    });
-    return best;
+    currentPlayer = currentPlayer === "X" ? "O" : "X";
+    status.textContent = `Player ${currentPlayer}'s turn — select a piece to move`;
+
+    if (vsAI && currentPlayer === "O" && gameActive) {
+      setTimeout(aiMovement, 400);
+    }
+  } else if (board[index] === currentPlayer) {
+    // switch selection to another own piece
+    cells[selectedCell].classList.remove("selected");
+    clearHighlights();
+    selectedCell = index;
+    cells[index].classList.add("selected");
+    highlightMoves(index);
   } else {
-    let best = Infinity;
-    boardState.forEach((cell, i) => {
-      if (cell === "") {
-        boardState[i] = "X";
-        best = Math.min(best, minimax(boardState, depth + 1, true));
-        boardState[i] = "";
-      }
-    });
-    return best;
+    status.textContent = `Invalid move! Select an adjacent empty cell.`;
   }
 }
 
-// --- Get Best Move ---
-function getBestMove(boardState) {
-  let bestScore = -Infinity;
-  let bestIndex = null;
-
-  boardState.forEach((cell, i) => {
-    if (cell === "") {
-      boardState[i] = "O";
-      const score = minimax(boardState, 0, false);
-      boardState[i] = "";
-      if (score > bestScore) {
-        bestScore = score;
-        bestIndex = i;
-      }
+// --- Highlight Valid Moves ---
+function highlightMoves(index) {
+  adjacentCells[index].forEach(adj => {
+    if (board[adj] === "") {
+      cells[adj].classList.add("highlight");
     }
   });
+}
 
-  return bestIndex;
+// --- Clear Highlights ---
+function clearHighlights() {
+  cells.forEach(cell => cell.classList.remove("highlight"));
+}
+
+// --- End Game ---
+function endGame(winner) {
+  status.textContent = `Player ${winner} wins!`;
+  updateScore(winner);
+  gameActive = false;
+}
+
+// --- AI Placement ---
+function aiPlacement() {
+  const empty = board.map((v, i) => v === "" ? i : null).filter(v => v !== null);
+  const index = empty[Math.floor(Math.random() * empty.length)];
+  handlePlacement(index);
+}
+
+// --- AI Movement ---
+function aiMovement() {
+  const aiPieces = board.map((v, i) => v === "O" ? i : null).filter(v => v !== null);
+  for (const piece of aiPieces) {
+    for (const adj of adjacentCells[piece]) {
+      if (board[adj] === "") {
+        selectedCell = piece;
+        handleMovement(adj);
+        return;
+      }
+    }
+  }
 }
 
 // --- Check Win ---
@@ -152,11 +211,6 @@ function checkWin(boardState, player) {
     boardState[b] === player &&
     boardState[c] === player
   );
-}
-
-// --- Check Draw ---
-function checkDraw(boardState) {
-  return boardState.every((cell) => cell !== "");
 }
 
 // --- Update Scoreboard ---
@@ -172,8 +226,15 @@ function restartGame() {
   board = ["", "", "", "", "", "", "", "", ""];
   currentPlayer = "X";
   gameActive = false;
-  cells.forEach((cell) => (cell.textContent = ""));
+  phase = "placement";
+  piecesPlaced = { X: 0, O: 0 };
+  selectedCell = null;
+  cells.forEach((cell) => {
+    cell.textContent = "";
+    cell.classList.remove("selected", "highlight");
+  });
   status.textContent = "Player X's turn";
+  phaseLabel.textContent = "Phase: Placement";
   modeSelector.style.display = "flex";
 }
 
